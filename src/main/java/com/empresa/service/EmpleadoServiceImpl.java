@@ -36,8 +36,13 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 	}
 
 	@Override
-	public List<Empleado> listaPorNombreApellidoIgual(String nombre, String apellido) {
-		return repository.listaEmpleadoPorNombreApellidoIgual(nombre, apellido);
+	public List<Empleado> listaPorNombreApellidoIgual(String nombres, String apellidos) {
+		return repository.listaEmpleadoPorNombreApellidoIgual(nombres, apellidos);
+	}
+
+	@Override
+	public List<Empleado> listaPorNombre(String nombres) {
+		return repository.findByNombresIgnoreCase(nombres);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,13 +61,13 @@ public class EmpleadoCrudController {
 		obj.setEstado(1);
 		obj.setFechaRegistro(new Date());
 		obj.setFechaActualizacion(new Date());
-		
+
 		List<Empleado> lstSalida = empleadoService.listaPorNombreApellidoIgual(obj.getNombres(), obj.getApellidos());
 		if (!CollectionUtils.isEmpty(lstSalida)) {
 			map.put("mensaje", "El empleado " + obj.getNombres() + " " + obj.getApellidos() + " ya existe");
 			return map;
 		}
-		
+
 		Empleado objSalida = empleadoService.insertaEmpleado(obj);
 		if (objSalida == null) {
 			map.put("mensaje", "Error en el registro");
@@ -77,16 +78,37 @@ public class EmpleadoCrudController {
 		}
 		return map;
 	}
-	
+
+	@PostMapping("/actualizaCrudEmpleado")
+	@ResponseBody
+	public Map<?, ?> actualiza(Empleado obj) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		Optional<Empleado> optEmpleado = empleadoService.buscaEmpleado(obj.getIdEmpleado());
+		obj.setFechaRegistro(optEmpleado.get().getFechaRegistro());
+		obj.setEstado(optEmpleado.get().getEstado());
+		obj.setFechaActualizacion(new Date());
+
+		Empleado objSalida = empleadoService.actualizaEmpleado(obj);
+		if (objSalida == null) {
+			map.put("mensaje", "Error en actualizar");
+		} else {
+			List<Empleado> lista = empleadoService.listaPorNombreApellidoLike("%");
+			map.put("lista", lista);
+			map.put("mensaje", "Actualización exitosa");
+		}
+		return map;
+	}
+
 	@GetMapping("/buscaEmpleadoMayorEdad")
 	@ResponseBody
 	public String validaFecha(String fechaNacimiento) {
 		log.info(">> validaFecha >> " + fechaNacimiento);
-		if(FunctionUtil.isMayorEdad(fechaNacimiento)) {
+		if (FunctionUtil.isMayorEdad(fechaNacimiento)) {
 			return "{\"valid\":true}";
-		}else {
+		} else {
 			return "{\"valid\":false}";
 		}
 	}
-	
+
 }

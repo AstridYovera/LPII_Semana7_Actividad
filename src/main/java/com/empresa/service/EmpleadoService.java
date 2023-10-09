@@ -9,10 +9,11 @@ public interface EmpleadoService {
 
 	//Crud
 	public abstract Empleado insertaEmpleado(Empleado obj);
+	public abstract List<Empleado> listaPorNombre(String nombres);
 	public abstract Empleado actualizaEmpleado(Empleado obj);
 	public abstract List<Empleado> listaPorNombreApellidoLike(String filtro);
 	public abstract Optional<Empleado> buscaEmpleado(int idEmpleado);
 	
 	//Validacion Registrar
-	public abstract List<Empleado> listaPorNombreApellidoIgual(String nombre, String apellido); 
+	public abstract List<Empleado> listaPorNombreApellidoIgual(String nombres, String apellidos); 
 }
