@@ -104,7 +104,7 @@
 		                                    <div class="form-group">
 		                                        <div class="col-lg-9 col-lg-offset-3">
 		                                        	<button type="button" class="btn btn-primary" id="id_btn_registra">REGISTRA</button>
-		                                                </div>
+		                                               </div>
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -119,13 +119,14 @@
 			
 		</div>
   
+  
 		 <div class="modal fade" id="id_div_modal_actualiza" >
 			<div class="modal-dialog" style="width: 60%">
 		
 				<div class="modal-content">
 				<div class="modal-header" style="padding: 35px 50px">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4><span class="glyphicon glyphicon-ok-sign"></span> Actualiza Modalidad</h4>
+					<h4><span class="glyphicon glyphicon-ok-sign"></span> Actualiza Empleado</h4>
 				</div>
 				<div class="modal-body" style="padding: 20px 10px;">
 						<form id="id_form_actualiza" accept-charset="UTF-8"  action="registraActualizaCrudEmpleado" class="form-horizontal"     method="post">
@@ -133,7 +134,7 @@
 		                        <!-- Step 1 -->
 		                        <div class="panel panel-default">
 		                            <div class="panel-heading">
-		                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#steps" href="#stepOne">Datos de Modalidad</a></h4>
+		                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="#steps" href="#stepOne">Datos de Empleado</a></h4>
 		                            </div>
 		                            <div id="stepOne" class="panel-collapse collapse in">
 		                                <div class="panel-body">
@@ -178,7 +179,9 @@
 		                            </div>
 		                        </div>
 		                        </div>
+
 		                </form>   
+				
 				</div>
 			</div>
 		</div>
@@ -285,8 +288,29 @@ $("#id_btn_registra").click(function(){
     }
 });
 
+$("#id_btn_actualiza").click(function(){
+	var validator = $('#id_form_actualiza').data('bootstrapValidator');
+    validator.validate();
+    if (validator.isValid()) {
+        $.ajax({
+          type: "POST",
+          url: "actualizaCrudEmpleado", 
+          data: $('#id_form_actualiza').serialize(),
+          success: function(data){
+        	  agregarGrilla(data.lista);
+        	  $('#id_div_modal_actualiza').modal("hide");
+        	  mostrarMensaje(data.mensaje);
+          },
+          error: function(){
+        	  mostrarMensaje(MSG_ERROR);
+          }
+        });
+    }
+});
 
+</script>
 
+<script type="text/javascript">
 $('#id_form_registra').bootstrapValidator({
     message: 'This value is not valid',
     feedbackIcons: {
@@ -345,7 +369,9 @@ $('#id_form_registra').bootstrapValidator({
     	
     }   
 });
+</script>
 
+<script type="text/javascript">
 $('#id_form_actualiza').bootstrapValidator({
     message: 'This value is not valid',
     feedbackIcons: {
@@ -401,11 +427,10 @@ $('#id_form_actualiza').bootstrapValidator({
                 },
             }
         },
-    	
+      
     }   
 });
-
 </script>
-    
+
 </body>
 </html> 
